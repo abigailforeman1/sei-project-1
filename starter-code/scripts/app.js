@@ -4,6 +4,7 @@ function init() {
   const grid = document.querySelector('.grid')
   const startBtn = document.querySelector('.start')
   const resetBtn = document.querySelector('.reset')
+  const scoreDisplay = document.querySelector('.score')
   const squares = []
 
   //! GAME VARIABLES 
@@ -11,11 +12,13 @@ function init() {
   let playerIndex = 115 // starts player at grid 111
   // let alienIndex = 1 // starts alien at grid 1
   let timerId = null // a variable to store our interval id, we need to know this so we can stop it later (think ticket at the coat check/cloakroom)
+  let shootTimerId = null
   let running = false // a boolean value we use to determine if we should be stopping or starting the timer when the button is clicked, if it is set to false we need to start the interval, if it is true we need to stop it
   // let topAliens = new Array(0, 1, 2, 3, 4, 5, 6, 7)
   // let middleAliens = new Array(11, 12, 13, 14, 15, 16, 17, 18)
   // let bottomAliens = new Array(22, 23, 24, 25, 26, 27, 28, 29)
-  let aliens = new Array(0, 1, 2, 3, 4, 5, 6, 7, 11, 12, 13, 14, 15, 16, 17, 18, 22, 23, 24, 25, 26, 27, 28, 29)
+  const aliens = new Array(0, 1, 2, 3, 4, 5, 6, 7, 11, 12, 13, 14, 15, 16, 17, 18, 22, 23, 24, 25, 26, 27, 28, 29)
+  let score = 0
 
   //! CREATE THE GAME GRID FROM DIV SQUARES!!!! styled in the CSS file 
   Array(width * width).join('.').split('.').forEach(() => {
@@ -43,45 +46,75 @@ function init() {
           playerIndex--
         }
         break
+      case 38:
+        {
+          shoot()
+        }
+        break
     }
     squares.forEach(square => square.classList.remove('player'))
     squares[playerIndex].classList.add('player')
-    console.log('current player index is', playerIndex)
+    // console.log('current player index is', playerIndex)
   }
+
+  //! FUNCTION TO START SHOOT TIMER
+  function shoot() {
+    let currentShootIndex = playerIndex - 11 // starts shot at square infront of player 
+    squares[currentShootIndex].classList.add('shoot')
+    shootTimerId = setInterval(shooter, 300) // starts the timer to make the shot move
+    console.log(shootTimerId)
+    //! FUNCTION TO MAKE SHOOT MOVE UP
+    function shooter() {
+      squares[currentShootIndex].classList.remove('shoot') // remove old shoot class
+      if (currentShootIndex > 10) { // stops shot going past end of grid
+        currentShootIndex = currentShootIndex - 11 // every half second of the timer -11 from the index
+        squares[currentShootIndex].classList.add('shoot') // add new shoot class to square
+      }
+      if (squares[currentShootIndex].classList.contains('alien')) { // if square already contains alien class 
+        score += 1000 // add points 
+        scoreDisplay.innerHTML = score // display points
+        squares[currentShootIndex].classList.remove('alien', 'shoot') // remove both classes 
+        clearInterval(shootTimerId++) // stop the timer for that shot 
+      }
+    }
+  }
+
 
   //! FUNCTION TO PLACE ALIENS ON GRID
   function placeAliens() {
     aliens.forEach((number) => {
       squares[number].classList.add('alien')
     })
+    score = 0
+    scoreDisplay.innerHTML = score
   }
 
-  //! FUNCTION TO MAKE ALIENS MOVE FROM LEFT TO RIGHT
-  function moveAliens() {
-    if (aliens[0] < 3) {
-      aliens.forEach((number) => {
-        squares[number].classList.remove('alien') // removing old alien class
-      })
+  // //! FUNCTION TO MAKE ALIENS MOVE FROM LEFT TO RIGHT
+  // function moveAliens() {
+  //   if (aliens[0] < 3) {
+  //     aliens.forEach((number) => {
+  //       squares[number].classList.remove('alien') // removing old alien class
+  //     })
 
-      aliens = aliens.map(a => a + 1) // adding 1 to each element in topAlien array 
+  //     aliens = aliens.map(a => a + 1) // adding 1 to each element in topAlien array 
 
-      aliens.forEach((number) => {
-        squares[number].classList.add('alien') // adding alien class to each new array element
-      })
-      
-    } else {
+  //     aliens.forEach((number) => {
+  //       squares[number].classList.add('alien') // adding alien class to each new array element
+  //     })
 
-      aliens.forEach((number) => {
-        squares[number].classList.remove('alien') // removing old alien class
-      })
+  //   } else {
 
-      aliens = aliens.map(a => a - 1) // adding 1 to each element in topAlien array 
+  //     aliens.forEach((number) => {
+  //       squares[number].classList.remove('alien') // removing old alien class
+  //     })
 
-      aliens.forEach((number) => {
-        squares[number].classList.add('alien') // adding alien class to each new array element
-      })
-    }
-  }
+  //     aliens = aliens.map(a => a - 1) // adding 1 to each element in topAlien array 
+
+  //     aliens.forEach((number) => {
+  //       squares[number].classList.add('alien') // adding alien class to each new array element
+  //     })
+  //   }
+  // }
 
 
   //! FUNCTION TO START GAME TIMER 

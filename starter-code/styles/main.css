@@ -47,3 +47,9 @@ div.grid-item.alien {
   align-items: center;
   margin-bottom: 30px;
 }
+
+div.grid-item.shoot {
+  background-image: url('../assets/explosion.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+}
