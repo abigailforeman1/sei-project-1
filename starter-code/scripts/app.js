@@ -12,9 +12,10 @@ function init() {
   // let alienIndex = 1 // starts alien at grid 1
   let timerId = null // a variable to store our interval id, we need to know this so we can stop it later (think ticket at the coat check/cloakroom)
   let running = false // a boolean value we use to determine if we should be stopping or starting the timer when the button is clicked, if it is set to false we need to start the interval, if it is true we need to stop it
-  let topAliens = new Array(0, 1, 2, 3, 4, 5, 6, 7)
-  let middleAliens = new Array(11, 12, 13, 14, 15, 16, 17, 18)
-  let bottomAliens = new Array(22, 23, 24, 25, 26, 27, 28, 29)
+  // let topAliens = new Array(0, 1, 2, 3, 4, 5, 6, 7)
+  // let middleAliens = new Array(11, 12, 13, 14, 15, 16, 17, 18)
+  // let bottomAliens = new Array(22, 23, 24, 25, 26, 27, 28, 29)
+  let aliens = new Array(0, 1, 2, 3, 4, 5, 6, 7, 11, 12, 13, 14, 15, 16, 17, 18, 22, 23, 24, 25, 26, 27, 28, 29)
 
   //! CREATE THE GAME GRID FROM DIV SQUARES!!!! styled in the CSS file 
   Array(width * width).join('.').split('.').forEach(() => {
@@ -42,8 +43,6 @@ function init() {
           playerIndex--
         }
         break
-      default:
-        console.log('You can\'t move with this key!')
     }
     squares.forEach(square => square.classList.remove('player'))
     squares[playerIndex].classList.add('player')
@@ -52,41 +51,38 @@ function init() {
 
   //! FUNCTION TO PLACE ALIENS ON GRID
   function placeAliens() {
-    // console.log('Here come the aliens!')
-    topAliens.forEach((number) => {
-      squares[number].classList.add('alien')
-    })
-    middleAliens.forEach((number) => {
-      squares[number].classList.add('alien')
-    })
-    bottomAliens.forEach((number) => {
+    aliens.forEach((number) => {
       squares[number].classList.add('alien')
     })
   }
 
   //! FUNCTION TO MAKE ALIENS MOVE FROM LEFT TO RIGHT
   function moveAliens() {
-    // console.log(topAliens[7])
-    // console.log(topAliens)
-    let allAliens = topAliens.concat(middleAliens, bottomAliens) // joining the three arrays into one array 
+    if (aliens[0] < 3) {
+      aliens.forEach((number) => {
+        squares[number].classList.remove('alien') // removing old alien class
+      })
 
-    if (allAliens[7] < 10) {
+      aliens = aliens.map(a => a + 1) // adding 1 to each element in topAlien array 
 
-      // if (topAliens[7] < 10 && middleAliens[7] < 21 && bottomAliens[7] < 32) { // checking if alien rows have reached the right side yet
+      aliens.forEach((number) => {
+        squares[number].classList.add('alien') // adding alien class to each new array element
+      })
+      
+    } else {
 
-      // allAliens.forEach((number) => {
-      //   squares[number].classList.remove('alien') // removing top row old alien class
-      // })
+      aliens.forEach((number) => {
+        squares[number].classList.remove('alien') // removing old alien class
+      })
 
-      allAliens = allAliens.map(a => a + 1) // adding 1 to each element in topAlien array 
-      console.log(allAliens)
+      aliens = aliens.map(a => a - 1) // adding 1 to each element in topAlien array 
 
-      // allAliens.forEach((number) => {
-      //   squares[number].classList.add('alien') // adding alien class to each new array element
-      // })
+      aliens.forEach((number) => {
+        squares[number].classList.add('alien') // adding alien class to each new array element
+      })
     }
-
   }
+
 
   //! FUNCTION TO START GAME TIMER 
   function startTimer() {
