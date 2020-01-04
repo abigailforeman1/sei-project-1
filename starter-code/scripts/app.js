@@ -13,12 +13,10 @@ function init() {
   // let alienIndex = 1 // starts alien at grid 1
   let timerId = null // a variable to store our interval id, we need to know this so we can stop it later (think ticket at the coat check/cloakroom)
   let shootTimerId = null
-  let running = false // a boolean value we use to determine if we should be stopping or starting the timer when the button is clicked, if it is set to false we need to start the interval, if it is true we need to stop it
-  // let topAliens = new Array(0, 1, 2, 3, 4, 5, 6, 7)
-  // let middleAliens = new Array(11, 12, 13, 14, 15, 16, 17, 18)
-  // let bottomAliens = new Array(22, 23, 24, 25, 26, 27, 28, 29)
-  const aliens = new Array(0, 1, 2, 3, 4, 5, 6, 7, 11, 12, 13, 14, 15, 16, 17, 18, 22, 23, 24, 25, 26, 27, 28, 29)
   let score = 0
+  let running = false // a boolean value we use to determine if we should be stopping or starting the timer when the button is clicked, if it is set to false we need to start the interval, if it is true we need to stop it
+  let aliens = new Array(0, 1, 2, 3, 4, 5, 6, 7, 11, 12, 13, 14, 15, 16, 17, 18, 22, 23, 24, 25, 26, 27, 28, 29)
+  let direction = 1
 
   //! CREATE THE GAME GRID FROM DIV SQUARES!!!! styled in the CSS file 
   Array(width * width).join('.').split('.').forEach(() => {
@@ -89,33 +87,44 @@ function init() {
     scoreDisplay.innerHTML = score
   }
 
-  // //! FUNCTION TO MAKE ALIENS MOVE FROM LEFT TO RIGHT
-  // function moveAliens() {
-  //   if (aliens[0] < 3) {
-  //     aliens.forEach((number) => {
-  //       squares[number].classList.remove('alien') // removing old alien class
-  //     })
+  //! FUNCTION TO MAKE ALIENS MOVE FROM LEFT TO RIGHT
+  function moveAliens() {
+    removeAliens()
+    console.log(direction)
 
-  //     aliens = aliens.map(a => a + 1) // adding 1 to each element in topAlien array 
+    // move 3 -> 14
+    if (direction === 1 && aliens[0] % width === 3) {
+      direction = width
 
-  //     aliens.forEach((number) => {
-  //       squares[number].classList.add('alien') // adding alien class to each new array element
-  //     })
+      // move 14 -> 11
+    } else if (direction === width && aliens[0] % width === 3) {
+      direction = -1
 
-  //   } else {
+      // move 11 -> 22
+    } else if (direction === -1 && aliens[0] % width === 0) {
+      direction = width
 
-  //     aliens.forEach((number) => {
-  //       squares[number].classList.remove('alien') // removing old alien class
-  //     })
+      // move 22 -> 25
+    } else if (direction === width && aliens[0] % width === 0) {
+      direction = 1
+    }
+    // aliens = aliens.map(a => a + direction)
+    addAliens()
+  }
 
-  //     aliens = aliens.map(a => a - 1) // adding 1 to each element in topAlien array 
 
-  //     aliens.forEach((number) => {
-  //       squares[number].classList.add('alien') // adding alien class to each new array element
-  //     })
-  //   }
-  // }
+  function addAliens() {
+    aliens = aliens.map(a => a + direction)
+    aliens.forEach((number) => {
+      squares[number].classList.add('alien') // adding alien class to each new array element
+    })
+  }
 
+  function removeAliens() {
+    aliens.forEach((number) => {
+      squares[number].classList.remove('alien') // removing old alien class
+    })
+  }
 
   //! FUNCTION TO START GAME TIMER 
   function startTimer() {
@@ -133,6 +142,7 @@ function init() {
   window.addEventListener('keydown', handleKeyDown)
   startBtn.addEventListener('click', startTimer)
   resetBtn.addEventListener('click', placeAliens)
+
 }
 
 window.addEventListener('DOMContentLoaded', init)
