@@ -10,7 +10,6 @@ function init() {
   //! GAME VARIABLES 
   const width = 11
   let playerIndex = 115 // starts player at grid 111
-  // let alienIndex = 1 // starts alien at grid 1
   let timerId = null // a variable to store our interval id, we need to know this so we can stop it later (think ticket at the coat check/cloakroom)
   let shootTimerId = null
   let score = 0
@@ -28,6 +27,8 @@ function init() {
 
   // places player at the starting position when grid has finished building 
   squares[playerIndex].classList.add('player') // controls where the player is based on the index of the square
+
+  placeAliens()
 
   //! FUNCTION TO MAKE SPACE SHIP MOVE
   function handleKeyDown(e) {
@@ -55,28 +56,50 @@ function init() {
     // console.log('current player index is', playerIndex)
   }
 
-  //! FUNCTION TO START SHOOT TIMER
+  //! FUNCTION TO ALLOW 1 SHOT PER COLUMN AT A TIME
   function shoot() {
-    let currentShootIndex = playerIndex - 11 // starts shot at square infront of player 
-    squares[currentShootIndex].classList.add('shoot')
-    shootTimerId = setInterval(shooter, 300) // starts the timer to make the shot move
-    console.log(shootTimerId)
-    //! FUNCTION TO MAKE SHOOT MOVE UP
-    function shooter() {
+    let currentShootIndex = playerIndex - width // starts shot at square infront of player 
+    let newShootIndex = currentShootIndex // new variable to stop currentShootIndex from changing
+    const columnArray = [] // array for index values of column with shot in 
+
+    for (let i = 1; i < width - 1; i++) {
+      columnArray.push(newShootIndex -= 11) // making the column array based on newShootIndex
+    }
+
+    // console.log(`currentShootIndex is ${currentShootIndex}`)
+    // console.log(`newShootIndex is ${newShootIndex}`)
+    // console.log(`column array is ${columnArray}`)
+
+    const someContainShots = columnArray.some(item => {
+      // console.log(squares[item])
+      return squares[item].classList.contains('shoot')
+    })
+
+    if (someContainShots === false) {
+      squares[currentShootIndex].classList.add('shoot')
+      shootTimerId = setInterval(shootMovement, 200) // starts the timer to make the shot move
+    } else {
+      console.log('you can\'t shoot!')
+    }
+
+    //! FUNCTION TO MOVE SHOT
+    function shootMovement() {
       squares[currentShootIndex].classList.remove('shoot') // remove old shoot class
-      if (currentShootIndex > 10) { // stops shot going past end of grid
-        currentShootIndex = currentShootIndex - 11 // every half second of the timer -11 from the index
+      if (currentShootIndex > width - 1) { // stops shot going past end of grid
+        currentShootIndex = currentShootIndex - width // every instance of the timer -11 from the index
         squares[currentShootIndex].classList.add('shoot') // add new shoot class to square
       }
       if (squares[currentShootIndex].classList.contains('alien')) { // if square already contains alien class 
+        clearInterval(shootTimerId++) // stop the timer for that shot 
+        squares[currentShootIndex].classList.remove('alien', 'shoot') // remove both classes 
+        const index = aliens.indexOf(currentShootIndex) // finds index of alien at currentShootIndex 
+        console.log(index)
+        aliens.splice(index, 1) // removes that alien from the alien array 
         score += 1000 // add points 
         scoreDisplay.innerHTML = score // display points
-        squares[currentShootIndex].classList.remove('alien', 'shoot') // remove both classes 
-        clearInterval(shootTimerId++) // stop the timer for that shot 
       }
     }
   }
-
 
   //! FUNCTION TO PLACE ALIENS ON GRID
   function placeAliens() {
@@ -90,7 +113,7 @@ function init() {
   //! FUNCTION TO MAKE ALIENS MOVE FROM LEFT TO RIGHT
   function moveAliens() {
     removeAliens()
-    console.log(direction)
+    // console.log(direction)
 
     // move 3 -> 14
     if (direction === 1 && aliens[0] % width === 3) {
@@ -108,10 +131,9 @@ function init() {
     } else if (direction === width && aliens[0] % width === 0) {
       direction = 1
     }
-    // aliens = aliens.map(a => a + direction)
+    // default option will add 1 to each alien array element until a condition is met in the loop --- this starts the aliens moving 
     addAliens()
   }
-
 
   function addAliens() {
     aliens = aliens.map(a => a + direction)
@@ -129,8 +151,8 @@ function init() {
   //! FUNCTION TO START GAME TIMER 
   function startTimer() {
     if (!running) {
-      timerId = setInterval(moveAliens, 1000) // start the interval, remember the syntax is 'what function to run, and how often to run it' and we store the return id in a variable, so we can use it to stop the interval later
-      console.log(timerId)
+      timerId = setInterval(moveAliens, 800) // start the interval, remember the syntax is 'what function to run, and how often to run it' and we store the return id in a variable, so we can use it to stop the interval later
+      // console.log(timerId)
       running = true
     } else { // so the else runs only if running was true
       clearInterval(timerId) // and that is when we stop the timer
