@@ -53,3 +53,9 @@ div.grid-item.shoot {
   background-repeat: no-repeat;
   background-size: contain;
 }
+
+div.grid-item.bomb {
+  background-image: url('../assets/bomb.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+}
