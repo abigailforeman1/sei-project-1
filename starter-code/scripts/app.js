@@ -3,8 +3,10 @@ function init() {
   //! DOM ELEMENTS 
   const grid = document.querySelector('.grid')
   const startBtn = document.querySelector('.start')
-  // const resetBtn = document.querySelector('.reset')
   const scoreDisplay = document.querySelector('.score')
+  const modal = document.querySelector('.modal')
+  const closeButton = document.querySelector('.close-button')
+  const modalText = document.querySelector('.modal-text')
 
   //! GAME VARIABLES 
   const squares = []
@@ -13,11 +15,13 @@ function init() {
   let timerId = null // a variable to store our interval id, we need to know this so we can stop it later (think ticket at the coat check/cloakroom)
   let shootTimerId = null
   let score = 0
+  scoreDisplay.innerHTML = score
   let running = false // a boolean value we use to determine if we should be stopping or starting the timer when the button is clicked, if it is set to false we need to start the interval, if it is true we need to stop it
   let aliens = new Array(0, 1, 2, 3, 4, 5, 6, 7, 11, 12, 13, 14, 15, 16, 17, 18, 22, 23, 24, 25, 26, 27, 28, 29)
   let direction = 1
   let bombDropTimerId = null
   let alienBombTimerId = null
+  // let alienSpeed = 1500
 
   //! CREATE THE GAME GRID FROM DIV SQUARES!!!!
   Array(width * width).join('.').split('.').forEach(() => {
@@ -37,8 +41,6 @@ function init() {
     aliens.forEach((number) => {
       squares[number].classList.add('alien')
     })
-    score = 0
-    scoreDisplay.innerHTML = score
   }
 
   //! FUNCTION TO MAKE ALIENS MOVE FROM LEFT TO RIGHT
@@ -61,9 +63,8 @@ function init() {
     } else if (direction === width && aliens[0] % width === 0) {
       direction = 1
 
-      // if aliens reach bottom -------------------- need to make this work 
-    // } else if (aliens[0] >= 88) {
-    //   restart()
+    } else if (aliens > 110) { // GAME OVER when aliens reach end of grid ------------- need to make this work 
+      gameOver()
     }
     // default option will add 1 to each alien array element until a condition is met in the loop --- this starts the aliens moving 
     addAliens()
@@ -84,15 +85,13 @@ function init() {
 
   //! FUNCTION TO START GAME TIMER 
   function startTimer() {
+    console.log(running)
     if (!running) {
-      timerId = setInterval(moveAliens, 800) // start the interval, remember the syntax is 'what function to run, and how often to run it' and we store the return id in a variable, so we can use it to stop the interval later
-      // console.log(timerId)
-      startBtn.innerHTML = 'STOP'
+      timerId = setInterval(moveAliens, 1250) // start the interval, remember the syntax is 'what function to run, and how often to run it' and we store the return id in a variable, so we can use it to stop the interval later
       running = true
     } else { // so the else runs only if running was true
-      startBtn.innerHTML = 'START'
-      clearInterval(timerId) // and that is when we stop the timer
-      // clearInterval(alienBombTimerId)
+      // clearInterval(timerId) // and that is when we stop the timer
+      gameOver()
       running = false // set the value of running back to false, so when the button is next clicked, we know to start the timer again 
     }
   }
@@ -133,14 +132,14 @@ function init() {
       columnArray.push(newShootIndex -= 11) // making the column array based on newShootIndex
     }
 
-    const someContainShots = columnArray.some(item => {
+    const someContainShots = columnArray.some(item => { // searching the column if it contains shots already
       // console.log(squares[item])
       return squares[item].classList.contains('shoot')
     })
 
     if (someContainShots === false) {
       squares[currentShootIndex].classList.add('shoot')
-      shootTimerId = setInterval(shootMovement, 200) // starts the timer to make the shot move
+      shootTimerId = setInterval(shootMovement, 100) // starts the timer to make the shot move
     } else {
       console.log('you can\'t shoot!')
     }
@@ -151,19 +150,36 @@ function init() {
       if (currentShootIndex > width - 1) { // stops shot going past end of grid
         currentShootIndex = currentShootIndex - width // every instance of the timer -11 from the index
         squares[currentShootIndex].classList.add('shoot') // add new shoot class to square
-      }
-      if (squares[currentShootIndex].classList.contains('alien')) { // if square already contains alien class 
-        clearInterval(shootTimerId++) // stop the timer for that shot 
-        squares[currentShootIndex].classList.remove('alien', 'shoot') // remove both classes 
-        const index = aliens.indexOf(currentShootIndex) // finds index of alien at currentShootIndex 
-        console.log(index)
-        aliens.splice(index, 1) // removes that alien from the alien array 
-        score += 1000 // add points 
-        scoreDisplay.innerHTML = score // display points
-      } else if (squares[currentShootIndex].classList.contains('bomb')) {
-        clearInterval(shootTimerId++)
-        clearInterval(bombDropTimerId++)
-        squares[currentShootIndex].classList.remove('bomb', 'shoot')
+        if (squares[currentShootIndex].classList.contains('alien')) { // if square already contains alien class 
+          clearInterval(shootTimerId) // stop the timer for that shot 
+          squares[currentShootIndex].classList.remove('alien', 'shoot') // remove both classes 
+          const index = aliens.indexOf(currentShootIndex) // finds index of alien at currentShootIndex 
+          aliens.splice(index, 1) // removes that alien from the alien array 
+          score += 1000 // add points
+          scoreDisplay.innerHTML = score // display points
+        }
+        if (aliens.length === 0) {
+          console.log('WINNER!')
+          // location.reload()
+          // console.log(running)
+          // running = true
+          // startTimer()
+          // console.log(running)
+          // console.log(aliens)
+          aliens = new Array(0, 1, 2, 3, 4, 5, 6, 7, 11, 12, 13, 14, 15, 16, 17, 18, 22, 23, 24, 25, 26, 27, 28, 29)
+          placeAliens()
+          console.log(aliens)
+          // alienSpeed -= 250
+          // console.log(alienSpeed)
+        }
+        if (squares[currentShootIndex].classList.contains('bomb')) {
+          console.log('bomb hit')
+          squares[currentShootIndex].classList.remove('bomb', 'shoot')
+          squares[currentShootIndex + width].classList.remove('bomb', 'shoot')
+          clearInterval(shootTimerId)
+          clearInterval(bombDropTimerId)
+        }
+        // check if bombs are above shot and remove and in the same column 
       }
     }
   }
@@ -171,7 +187,7 @@ function init() {
   //! FUNCTION TO START BOMB TIMER
   function alienBombTimer() {
     // console.log('hello alien bombs')
-    alienBombTimerId = setInterval(placeBomb, 1000)
+    alienBombTimerId = setInterval(placeBomb, 2000)
   }
 
   //! FUNCTION TO DROP BOMBS
@@ -191,36 +207,49 @@ function init() {
     }
 
     dropBomb()
-    bombDropTimerId = setInterval(dropBomb, 400)
+    bombDropTimerId = setInterval(dropBomb, 200)
 
     //! FUNCTION TO DROP BOMBS
     function dropBomb() {
-      console.log(`startOfBomb is ${startOfBomb}`)
-      console.log(`timer ID is ${bombDropTimerId}`)
       squares[startOfBomb].classList.remove('bomb') // remove old bomb class
-      if (startOfBomb < (width * width) - 1) {
+      if (startOfBomb <= (width * width) - width) {
         startOfBomb += width // every instance of the timer -11 from the index
         squares[startOfBomb].classList.add('bomb') // add new bomb class to square
+        if (squares[startOfBomb].classList.contains('player')) {
+          gameOver()
+        }
       }
-    }
-    if (startOfBomb > (width * width) - 1) {
-      clearInterval(bombDropTimerId++)
     }
   }
 
-  // //! FUNCTION TO RESTART EVERYTHING
-  // function restart() {
-  //   clearInterval(timerId)
-  //   clearInterval(bombDropTimerId)
-  //   clearInterval(alienBombTimerId)
-  // }
+  function gameOver() {
+    clearInterval(timerId)
+    clearInterval(shootTimerId)
+    clearInterval(bombDropTimerId)
+    clearInterval(alienBombTimerId)
+    removeAliens()
+    modalText.innerHTML = `Ouch! Your score is ${score}`
+    toggleModal()
+  }
+
+  function toggleModal() {
+    modal.classList.add('show-modal')
+  }
+
+  function toggleModalClose() {
+    modal.classList.remove('show-modal')
+    aliens = new Array(0, 1, 2, 3, 4, 5, 6, 7, 11, 12, 13, 14, 15, 16, 17, 18, 22, 23, 24, 25, 26, 27, 28, 29)
+    placeAliens()
+    startTimer()
+    score = 0
+    scoreDisplay.innerHTML = score
+  }
 
   //! EVENT LISTENERS
   window.addEventListener('keydown', handleKeyDown)
   startBtn.addEventListener('click', startTimer)
   startBtn.addEventListener('click', alienBombTimer)
-  // resetBtn.addEventListener('click', placeAliens)
-
+  closeButton.addEventListener('click', toggleModalClose)
 }
 
 window.addEventListener('DOMContentLoaded', init)
