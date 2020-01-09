@@ -12,15 +12,19 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  background-image: url('../assets/colorful-pastel-fluffy-cotton-candy-background-soft-color-sweet-candyfloss-abstract-blur_44651-198.jpg');
+  height: 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 div.grid {
   width: 550px;
   height: 550px;
   display: flex;
-  /* justify-content: center; */
   flex-wrap: wrap;
-  background-color: paleturquoise;
+  background-color: rgba(27, 27, 27, 1);  
 }
 
 div.grid-item {
@@ -30,48 +34,31 @@ div.grid-item {
 }
 
 div.grid-item.player {
-  background-image: url('../assets/space_ship.png');
+  background-image: url('../assets/lisa.png');
   background-repeat: no-repeat;
   background-size: contain;
+  background-position: center;
 }
 
 div.grid-item.alien {
-  background-image: url('../assets/alien_2.png');
+  background-image: url('../assets/bart_alienalien.gif');
   background-repeat: no-repeat;
+  background-position: center;
   background-size: contain;
 }
 
-.panel {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  margin-bottom: 30px;
-}
-
 div.grid-item.shoot {
-  background-image: url('../assets/explosion.png');
+  background-image: url('../assets/blue-fire-transparent-pic-13.png');
   background-repeat: no-repeat;
   background-size: contain;
 }
 
 div.grid-item.bomb {
-  background-image: url('../assets/bomb.png');
+  background-image: url('../assets/Simpsons-Donut-Transparent-Free-PNG.png');
   background-repeat: no-repeat;
   background-size: contain;
 }
 
-.modal {
-  position: fixed;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  opacity: 0;
-  visibility: hidden;
-  transform: scale(1.1);
-  transition: visibility 0s linear 0.25s, opacity 0.25s 0s, transform 0.25s;
-}
 .modal-content {
   position: absolute;
   top: 50%;
@@ -82,21 +69,109 @@ div.grid-item.bomb {
   width: 24rem;
   border-radius: 0.5rem;
 }
-.close-button {
-  float: right;
-  width: 1.5rem;
-  line-height: 1.5rem;
-  text-align: center;
-  cursor: pointer;
-  border-radius: 0.25rem;
-  background-color: lightgray;
+.start-screen, .modal {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 180, 242, 0.5);
+  opacity: 0;
+  visibility: hidden;
+  transform: scale(1.1);
+  transition: visibility 0s linear 0.25s, opacity 0.25s 0s, transform 0.25s;
 }
-.close-button:hover {
-  background-color: darkgray;
+.first-modal-content, .modal-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(27, 27, 27, 1);
+  padding: 1rem 1.5rem;
+  width: 24rem;
+  border-radius: 0.5rem;
 }
+
 .show-modal {
   opacity: 1;
   visibility: visible;
   transform: scale(1.0);
   transition: visibility 0s linear 0s, opacity 0.25s 0s, transform 0.25s;
+}
+
+.modal-text {
+  font-family: 'Bungee', cursive;
+  font-size: 30px;
+  text-align: center;
+  color: white;
+  margin: 5px;
+}
+
+h1 {
+  font-family: 'Bungee', cursive;
+  font-size: 50px;
+  text-align: center;
+  color: white;
+  margin: 5px;
+}
+
+.dash-line {
+  color: white;
+  font-family: 'Bungee', cursive;
+  font-size: 20px;
+  text-align: center;
+
+}
+
+li {
+  color: white;
+  font-family: 'Tajawal', sans-serif;
+  font-size: 20px;
+}
+
+h2 {
+  color: rgba(27, 27, 27, 1);  
+  font-family: 'Bungee', cursive;
+  font-size: 20px;
+}
+
+.button-class {
+  display: flex;
+  justify-content: center;
+}
+
+button {
+  color:rgba(27, 27, 27, 1);
+  font-family: 'Bungee', cursive;
+  background-color: white;
+  font-size: 20px;
+  text-align: center;
+  padding: 8px 8px;
+  margin: 5px;
+}
+
+@keyframes pulse {
+  from {
+    -webkit-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+  }
+
+  50% {
+    -webkit-transform: scale3d(1.15, 1.15, 1.15);
+    transform: scale3d(1.15, 1.15, 1.15);
+  }
+
+  to {
+    -webkit-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+  }
+}
+
+.pulse {
+  -webkit-animation-name: pulse;
+  animation-name: pulse;
+}
+
+.button-class:hover {
+  animation: pulse 1s;
 }

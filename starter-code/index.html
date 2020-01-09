@@ -6,21 +6,38 @@
   <title>WDI Project 1</title>
   <script type="text/javascript" src="scripts/app.js"></script>
   <link rel="stylesheet" href="styles/main.css">
+  <link href="https://fonts.googleapis.com/css?family=Bungee|Codystar|Gruppo|Reem+Kufi|Tajawal&display=swap"
+    rel="stylesheet">
+
 </head>
 
 <body>
   <main>
+    <div class="start-screen">
+      <div class="first-modal-content">
+        <h1>SPACE INVADERS</h1>
+        <div class="dash-line">-----------------------------------</div>
+        <ul>
+          <li>L & R arrow key: move your space ship left & right</li>
+          <li>Up arrow key: shoot!</li>
+        </ul>
+        <!-- <h2>Watch out for falling alien bombs!</h2> -->
+        <div class="button-class">
+          <button class="start">START GAME</button>
+        </div>
+      </div>
+    </div>
     <div class="grid">
     </div>
-    <div class="panel">
-      <button class="start">START</button>
-    </div>
-    <h3>Score: <span class="score">0</span></h3>
+
+    <h2>Score: <span class="score">0</span></h2>
     <div class="modal">
-        <div class="modal-content">
-            <span class="close-button">&times;</span>
-            <h1 class="modal-text">Your score is:</h1>
+      <div class="modal-content">
+        <h1 class="modal-text"></h1>
+        <div class="button-class">
+          <button class="start">START AGAIN</button>
         </div>
+      </div>
     </div>
   </main>
 </body>

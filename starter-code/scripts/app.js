@@ -2,6 +2,7 @@ function init() {
 
   //! DOM ELEMENTS 
   const grid = document.querySelector('.grid')
+  const startScreen = document.querySelector('.start-screen')
   const startBtn = document.querySelector('.start')
   const scoreDisplay = document.querySelector('.score')
   const modal = document.querySelector('.modal')
@@ -23,6 +24,16 @@ function init() {
   let alienBombTimerId = null
   // let alienSpeed = 1500
 
+  //! FUNCTION TO OPEN POP UP AT START
+  function openFirstModal() {
+    startScreen.classList.add('show-modal') 
+    console.log('opening modal')
+  }
+  //! FUNCTION TO CLOSE POP UP AT START
+  function closeFirstModal() {
+    startScreen.classList.remove('show-modal') 
+  }
+
   //! CREATE THE GAME GRID FROM DIV SQUARES!!!!
   Array(width * width).join('.').split('.').forEach(() => {
     const square = document.createElement('div') // make a square every time and give it a div 
@@ -42,6 +53,8 @@ function init() {
       squares[number].classList.add('alien')
     })
   }
+
+  openFirstModal()
 
   //! FUNCTION TO MAKE ALIENS MOVE FROM LEFT TO RIGHT
   function moveAliens() {
@@ -222,21 +235,23 @@ function init() {
     }
   }
 
+  //! FUNCTION TO CLEAR GAME WHEN DEAD
   function gameOver() {
     clearInterval(timerId)
     clearInterval(shootTimerId)
     clearInterval(bombDropTimerId)
     clearInterval(alienBombTimerId)
     removeAliens()
-    modalText.innerHTML = `Ouch! Your score is ${score}`
-    toggleModal()
+    modalText.innerHTML = `D'OH! Your score: ${score}`
+    gameOverModal()
   }
 
-  function toggleModal() {
+  //! FUNCTION TO OPEN POP UP WHEN GAME OVER
+  function gameOverModal() {
     modal.classList.add('show-modal')
   }
-
-  function toggleModalClose() {
+  //! FUNCTION TO CLOSE POP UP WHEN GAME OVER
+  function gameOverModalClose() {
     modal.classList.remove('show-modal')
     aliens = new Array(0, 1, 2, 3, 4, 5, 6, 7, 11, 12, 13, 14, 15, 16, 17, 18, 22, 23, 24, 25, 26, 27, 28, 29)
     placeAliens()
@@ -247,9 +262,13 @@ function init() {
 
   //! EVENT LISTENERS
   window.addEventListener('keydown', handleKeyDown)
+  startBtn.addEventListener('click', closeFirstModal)
   startBtn.addEventListener('click', startTimer)
   startBtn.addEventListener('click', alienBombTimer)
-  closeButton.addEventListener('click', toggleModalClose)
+  closeButton.addEventListener('click', gameOverModalClose)
 }
 
 window.addEventListener('DOMContentLoaded', init)
+
+
+// let storedHiScore = localStorage.getItem('storedHiiScore') ?  JSON.parse
