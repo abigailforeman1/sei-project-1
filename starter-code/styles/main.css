@@ -135,7 +135,7 @@ h2 {
   font-size: 20px;
 }
 
-.button-class {
+.button-class, .restart-button-class {
   display: flex;
   justify-content: center;
 }

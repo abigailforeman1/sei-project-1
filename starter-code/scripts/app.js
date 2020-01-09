@@ -4,13 +4,13 @@ function init() {
   const grid = document.querySelector('.grid')
   const startScreen = document.querySelector('.start-screen')
   const startBtn = document.querySelector('.start')
+  const restartBtn = document.querySelector('.restart')
   const scoreDisplay = document.querySelector('.score')
   const modal = document.querySelector('.modal')
-  const closeButton = document.querySelector('.close-button')
   const modalText = document.querySelector('.modal-text')
 
   //! GAME VARIABLES 
-  const squares = []
+  let squares = []
   const width = 11
   let playerIndex = 115 // starts player at grid 111
   let timerId = null // a variable to store our interval id, we need to know this so we can stop it later (think ticket at the coat check/cloakroom)
@@ -27,7 +27,7 @@ function init() {
   //! FUNCTION TO OPEN POP UP AT START
   function openFirstModal() {
     startScreen.classList.add('show-modal') 
-    console.log('opening modal')
+    // console.log('opening modal')
   }
   //! FUNCTION TO CLOSE POP UP AT START
   function closeFirstModal() {
@@ -35,12 +35,16 @@ function init() {
   }
 
   //! CREATE THE GAME GRID FROM DIV SQUARES!!!!
-  Array(width * width).join('.').split('.').forEach(() => {
-    const square = document.createElement('div') // make a square every time and give it a div 
-    square.classList.add('grid-item')
-    squares.push(square)
-    grid.appendChild(square)
-  })
+  function makeGrid() {
+    Array(width * width).join('.').split('.').forEach(() => {
+      const square = document.createElement('div') // make a square every time and give it a div 
+      square.classList.add('grid-item')
+      squares.push(square)
+      grid.appendChild(square)
+    })
+  }
+
+  makeGrid()
 
   // places player at the starting position when grid has finished building 
   squares[playerIndex].classList.add('player') // controls where the player is based on the index of the square
@@ -76,7 +80,7 @@ function init() {
     } else if (direction === width && aliens[0] % width === 0) {
       direction = 1
 
-    } else if (aliens > 110) { // GAME OVER when aliens reach end of grid ------------- need to make this work 
+    } else if (aliens[0] > 110) { // GAME OVER when aliens reach end of grid ------------- need to make this work 
       gameOver()
     }
     // default option will add 1 to each alien array element until a condition is met in the loop --- this starts the aliens moving 
@@ -102,6 +106,7 @@ function init() {
     if (!running) {
       timerId = setInterval(moveAliens, 1250) // start the interval, remember the syntax is 'what function to run, and how often to run it' and we store the return id in a variable, so we can use it to stop the interval later
       running = true
+      console.log(running)
     } else { // so the else runs only if running was true
       // clearInterval(timerId) // and that is when we stop the timer
       gameOver()
@@ -237,6 +242,8 @@ function init() {
 
   //! FUNCTION TO CLEAR GAME WHEN DEAD
   function gameOver() {
+    running = false
+    console.log(running)
     clearInterval(timerId)
     clearInterval(shootTimerId)
     clearInterval(bombDropTimerId)
@@ -246,26 +253,42 @@ function init() {
     gameOverModal()
   }
 
+  //! FUNCTION TO CLEAR GRID
+  function clearGrid() {
+    grid.innerHTML = ''
+    score = 0
+    scoreDisplay.innerHTML = score   
+    squares = []
+    aliens = new Array(0, 1, 2, 3, 4, 5, 6, 7, 11, 12, 13, 14, 15, 16, 17, 18, 22, 23, 24, 25, 26, 27, 28, 29)
+    direction = 1
+    playerIndex = 115
+  }
+
   //! FUNCTION TO OPEN POP UP WHEN GAME OVER
   function gameOverModal() {
+    console.log('open')
     modal.classList.add('show-modal')
   }
   //! FUNCTION TO CLOSE POP UP WHEN GAME OVER
   function gameOverModalClose() {
+    console.log('closing')
     modal.classList.remove('show-modal')
-    aliens = new Array(0, 1, 2, 3, 4, 5, 6, 7, 11, 12, 13, 14, 15, 16, 17, 18, 22, 23, 24, 25, 26, 27, 28, 29)
+    clearGrid()
+    makeGrid()
     placeAliens()
     startTimer()
-    score = 0
-    scoreDisplay.innerHTML = score
   }
 
   //! EVENT LISTENERS
   window.addEventListener('keydown', handleKeyDown)
+
   startBtn.addEventListener('click', closeFirstModal)
   startBtn.addEventListener('click', startTimer)
   startBtn.addEventListener('click', alienBombTimer)
-  closeButton.addEventListener('click', gameOverModalClose)
+
+  restartBtn.addEventListener('click', gameOverModalClose)
+  restartBtn.addEventListener('click', startTimer)
+  restartBtn.addEventListener('click', alienBombTimer)
 }
 
 window.addEventListener('DOMContentLoaded', init)
