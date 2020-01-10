@@ -59,23 +59,14 @@ div.grid-item.bomb {
   background-size: contain;
 }
 
-.modal-content {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: white;
-  padding: 1rem 1.5rem;
-  width: 24rem;
-  border-radius: 0.5rem;
-}
 .start-screen, .modal {
   position: fixed;
   left: 0;
   top: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(255, 180, 242, 0.5);
+  /* background-color: rgba(255, 180, 242, 0.5); */
+  background-color: rgba(27, 27, 27, 1);  
   opacity: 0;
   visibility: hidden;
   transform: scale(1.1);
@@ -115,6 +106,14 @@ h1 {
   margin: 5px;
 }
 
+.main-title {
+  font-family: 'Bungee', cursive;
+  font-size: 50px;
+  text-align: center;
+  color: rgba(27, 27, 27, 1);  
+  margin: 25px;
+}
+
 .dash-line {
   color: white;
   font-family: 'Bungee', cursive;
@@ -126,12 +125,6 @@ h1 {
 li {
   color: white;
   font-family: 'Tajawal', sans-serif;
-  font-size: 20px;
-}
-
-h2 {
-  color: rgba(27, 27, 27, 1);  
-  font-family: 'Bungee', cursive;
   font-size: 20px;
 }
 
@@ -147,7 +140,7 @@ button {
   font-size: 20px;
   text-align: center;
   padding: 8px 8px;
-  margin: 5px;
+  margin: 8px;
 }
 
 @keyframes pulse {
@@ -176,6 +169,41 @@ button {
   animation: pulse 1s;
 }
 
+h3 {
+  color: rgba(27, 27, 27, 1);  
+  font-family: 'Bungee', cursive;
+  font-size: 20px;
+  margin: 5px;
+}
+
 .hi-score {
-  background-color: black;
+  color: rgba(27, 27, 27, 1);  
+  font-family: 'Bungee', cursive;
+  font-size: 20px;
+  margin: 5px;
+}
+
+.main-wrapper {
+  flex-grow: 1;
+  display: flex;
+}
+
+.grid-wrapper {
+  flex: 3;
+}
+
+h2 {
+  color: rgba(27, 27, 27, 1);  
+  font-family: 'Bungee', cursive;
+  font-size: 20px;
+  flex-direction: column;
+}
+
+.leader-board-wrapper {
+  margin: 0px 20px;
+  height: 50px;
+}
+
+.leader-board {
+  border: 2px dashed dodgerblue;
 }

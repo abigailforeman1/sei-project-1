@@ -26,6 +26,8 @@ function init() {
   let storedHiScore = localStorage.getItem('storedHiScore') ? JSON.parse(localStorage.getItem('storedHiScore')) : null
   const data = JSON.parse(localStorage.getItem('storedHiScore'))
 
+  displayHiScore()
+
   //! FUNCTION TO OPEN POP UP AT START
   function openFirstModal() {
     startScreen.classList.add('show-modal') 
@@ -65,25 +67,21 @@ function init() {
     hiScore.classList.add('hi-score')
     hiScore.innerHTML = storedHiScore
     eachScore.appendChild(hiScore) 
-    console.log(hiScore)
+    // eachScore.removeChild(eachScore.lastChild)
   }
 
   //! FUNCTION TO STORE HIGH SCORE TO LOCAL STORAGE
   function storeScores() {
-    if (score > storedHiScore) { // if the current points value is higher than the value stored in local storage
-      storedHiScore = score // assign storedHiScore to equal the current value of points
-      localStorage.setItem('storedHiScore', JSON.stringify(storedHiScore)) // set storedHiScore into local storage
-      // this is a key value pair - you are setting the key above and then giving it the value of your latest 
-      // high score
-      hiScoreCreate() // this will enable you to display the score immediately if needed
+    if (score > storedHiScore) { 
+      storedHiScore = score 
+      localStorage.setItem('storedHiScore', JSON.stringify(storedHiScore)) 
+      hiScoreCreate() 
     }
   }
 
   function displayHiScore() {
     data ? hiScoreCreate(data) : null
   }
-  displayHiScore()
-
   //! FUNCTION TO MAKE ALIENS MOVE FROM LEFT TO RIGHT
   function moveAliens() {
     removeAliens()
@@ -152,7 +150,7 @@ function init() {
           playerIndex--
         }
         break
-      case 38:
+      case 32:
         {
           shoot()
         }
@@ -279,6 +277,7 @@ function init() {
     clearInterval(alienBombTimerId)
     modalText.innerHTML = `D'OH! Your score: ${score}`
     gameOverModal()
+    storeScores()
   }
 
   //! FUNCTION TO CLEAR GRID
@@ -307,8 +306,6 @@ function init() {
     startTimer()
   }
 
-  storeScores()
-
   //! EVENT LISTENERS
   window.addEventListener('keydown', handleKeyDown)
 
@@ -323,6 +320,3 @@ function init() {
 }
 
 window.addEventListener('DOMContentLoaded', init)
-
-
-// let storedHiScore = localStorage.getItem('storedHiiScore') ?  JSON.parse
