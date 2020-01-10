@@ -8,27 +8,31 @@ function init() {
   const scoreDisplay = document.querySelector('.score')
   const modal = document.querySelector('.modal')
   const modalText = document.querySelector('.modal-text')
+  const eachScore = document.querySelector('.each-score')
 
   //! GAME VARIABLES 
   let squares = []
   const width = 11
-  let playerIndex = 115 // starts player at grid 111
-  let timerId = null // a variable to store our interval id, we need to know this so we can stop it later (think ticket at the coat check/cloakroom)
+  let playerIndex = 115 
+  let timerId = null 
   let shootTimerId = null
   let score = 0
   scoreDisplay.innerHTML = score
-  let running = false // a boolean value we use to determine if we should be stopping or starting the timer when the button is clicked, if it is set to false we need to start the interval, if it is true we need to stop it
+  let running = false 
   let aliens = new Array(0, 1, 2, 3, 4, 5, 6, 7, 11, 12, 13, 14, 15, 16, 17, 18, 22, 23, 24, 25, 26, 27, 28, 29)
   let direction = 1
   let bombDropTimerId = null
   let alienBombTimerId = null
-  // let alienSpeed = 1500
+  let storedHiScore = localStorage.getItem('storedHiScore') ? JSON.parse(localStorage.getItem('storedHiScore')) : null
+  const data = JSON.parse(localStorage.getItem('storedHiScore'))
 
   //! FUNCTION TO OPEN POP UP AT START
   function openFirstModal() {
     startScreen.classList.add('show-modal') 
     // console.log('opening modal')
   }
+  openFirstModal()
+
   //! FUNCTION TO CLOSE POP UP AT START
   function closeFirstModal() {
     startScreen.classList.remove('show-modal') 
@@ -43,13 +47,9 @@ function init() {
       grid.appendChild(square)
     })
   }
-
   makeGrid()
 
-  // places player at the starting position when grid has finished building 
   squares[playerIndex].classList.add('player') // controls where the player is based on the index of the square
-
-  placeAliens()
 
   //! FUNCTION TO PLACE ALIENS ON GRID
   function placeAliens() {
@@ -57,8 +57,32 @@ function init() {
       squares[number].classList.add('alien')
     })
   }
+  placeAliens()
 
-  openFirstModal()
+  //! FUNCTION TO CREATE HIGH SCORE DISPLAY
+  function hiScoreCreate() {
+    const hiScore = document.createElement('div')
+    hiScore.classList.add('hi-score')
+    hiScore.innerHTML = storedHiScore
+    eachScore.appendChild(hiScore) 
+    console.log(hiScore)
+  }
+
+  //! FUNCTION TO STORE HIGH SCORE TO LOCAL STORAGE
+  function storeScores() {
+    if (score > storedHiScore) { // if the current points value is higher than the value stored in local storage
+      storedHiScore = score // assign storedHiScore to equal the current value of points
+      localStorage.setItem('storedHiScore', JSON.stringify(storedHiScore)) // set storedHiScore into local storage
+      // this is a key value pair - you are setting the key above and then giving it the value of your latest 
+      // high score
+      hiScoreCreate() // this will enable you to display the score immediately if needed
+    }
+  }
+
+  function displayHiScore() {
+    data ? hiScoreCreate(data) : null
+  }
+  displayHiScore()
 
   //! FUNCTION TO MAKE ALIENS MOVE FROM LEFT TO RIGHT
   function moveAliens() {
@@ -80,7 +104,7 @@ function init() {
     } else if (direction === width && aliens[0] % width === 0) {
       direction = 1
 
-    } else if (aliens[0] > 110) { // GAME OVER when aliens reach end of grid ------------- need to make this work 
+    } else if (aliens[0] > (width * width) - width) { // GAME OVER when aliens reach end of grid 
       gameOver()
     }
     // default option will add 1 to each alien array element until a condition is met in the loop --- this starts the aliens moving 
@@ -104,13 +128,12 @@ function init() {
   function startTimer() {
     console.log(running)
     if (!running) {
-      timerId = setInterval(moveAliens, 1250) // start the interval, remember the syntax is 'what function to run, and how often to run it' and we store the return id in a variable, so we can use it to stop the interval later
+      timerId = setInterval(moveAliens, 1250) 
       running = true
       console.log(running)
-    } else { // so the else runs only if running was true
+    } else { 
       // clearInterval(timerId) // and that is when we stop the timer
-      gameOver()
-      running = false // set the value of running back to false, so when the button is next clicked, we know to start the timer again 
+      running = false 
     }
   }
 
@@ -208,7 +231,7 @@ function init() {
     alienBombTimerId = setInterval(placeBomb, 2000)
   }
 
-  //! FUNCTION TO DROP BOMBS
+  //! FUNCTION TO PLACE BOMBS
   function placeBomb() {
     const randomAlien = Math.floor(Math.random() * aliens.length) // generate random number between the length of alien array
     let startOfBomb = aliens[randomAlien] + width
@@ -230,12 +253,18 @@ function init() {
     //! FUNCTION TO DROP BOMBS
     function dropBomb() {
       squares[startOfBomb].classList.remove('bomb') // remove old bomb class
-      if (startOfBomb <= (width * width) - width) {
+      // console.log(startOfBomb)
+      // console.log(squares[startOfBomb])
+      if (startOfBomb <= 110) {
+        console.log(startOfBomb)
         startOfBomb += width // every instance of the timer -11 from the index
         squares[startOfBomb].classList.add('bomb') // add new bomb class to square
         if (squares[startOfBomb].classList.contains('player')) {
           gameOver()
         }
+      } else {
+        console.log('past grid')
+        clearInterval(bombDropTimerId)
       }
     }
   }
@@ -243,12 +272,11 @@ function init() {
   //! FUNCTION TO CLEAR GAME WHEN DEAD
   function gameOver() {
     running = false
-    console.log(running)
+    // console.log(running)
     clearInterval(timerId)
     clearInterval(shootTimerId)
     clearInterval(bombDropTimerId)
     clearInterval(alienBombTimerId)
-    removeAliens()
     modalText.innerHTML = `D'OH! Your score: ${score}`
     gameOverModal()
   }
@@ -266,18 +294,20 @@ function init() {
 
   //! FUNCTION TO OPEN POP UP WHEN GAME OVER
   function gameOverModal() {
-    console.log('open')
+    // console.log('open')
     modal.classList.add('show-modal')
   }
   //! FUNCTION TO CLOSE POP UP WHEN GAME OVER
   function gameOverModalClose() {
-    console.log('closing')
+    // console.log('closing')
     modal.classList.remove('show-modal')
     clearGrid()
     makeGrid()
     placeAliens()
     startTimer()
   }
+
+  storeScores()
 
   //! EVENT LISTENERS
   window.addEventListener('keydown', handleKeyDown)
@@ -289,6 +319,7 @@ function init() {
   restartBtn.addEventListener('click', gameOverModalClose)
   restartBtn.addEventListener('click', startTimer)
   restartBtn.addEventListener('click', alienBombTimer)
+  restartBtn.addEventListener('click', handleKeyDown)
 }
 
 window.addEventListener('DOMContentLoaded', init)

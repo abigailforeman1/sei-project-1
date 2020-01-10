@@ -175,3 +175,7 @@ button {
 .button-class:hover {
   animation: pulse 1s;
 }
+
+.hi-score {
+  background-color: black;
+}
