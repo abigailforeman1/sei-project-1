@@ -1,3 +1,37 @@
+//* Space Invaders
+
+// Space Invaders is a classic arcade game from the 80s. The player aims to shoot an invading alien armada, before it reaches the planet's surface using a mounted gun turret.
+
+// The player can only move left or right. The aliens also move from left to right, and also down each time the reach the side of the screen. The aliens also periodically drop bombs towards the player.
+
+// Once the player has destroyed a wave of aliens, the game starts again. The aim is to achieve the highest score possible before either being destroyed by the aliens, or allowing them to reach the planet's surface.
+
+//* Requirements
+
+// The player should be able to clear at least one wave of aliens
+// The player's score should be displayed at the end of the game
+
+//* ------- planning -------
+
+// 1. create the 11x11 grid out of divs
+// 2. add the player spaceship and place on the grid at the center bottom div square
+// 3. create function to allow spaceship to move from left to right along bottom row and within the grid
+// 4. create array of invading aliens and place on grid
+// 5. build functionality to start a timer to move aliens from side to side and down one row when they touch the side
+// 6. allow player to fire bullets from spaceship that shoot up the column of the grid based on where the spaceship shot from - user another timer
+// 7. when a bullet hits an alien, add a point to the players score and remove this alien from the game until the game restarts
+// 8. allow random aliens to drop bombs at a random time - if they hit the players spaceship its game over - user another timer 
+// 9. if the player shoots a bullet and it hits the aliens bomb, remove both from the grid
+// 10. if the aliens get to the bottom of the grid and touch the player its game over 
+// 11. if the player kills all aliens they win the game 
+// 12. build functionality to display the players score
+
+// NICE TO HAVES: 
+// 1. add a leaderboard using local storage
+// 2. speed up aliens once an entire wave is killed off 
+// 3. add a modal popup to start and end game
+// 4. allow 1 bullet per column at a time
+
 function init() {
 
   //! DOM ELEMENTS 
@@ -25,6 +59,7 @@ function init() {
   let alienBombTimerId = null
   let storedHiScore = localStorage.getItem('storedHiScore') ? JSON.parse(localStorage.getItem('storedHiScore')) : null
   const data = JSON.parse(localStorage.getItem('storedHiScore'))
+
 
   displayHiScore()
 
