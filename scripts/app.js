@@ -117,6 +117,7 @@ function init() {
   function displayHiScore() {
     data ? hiScoreCreate(data) : null
   }
+  
   //! FUNCTION TO MAKE ALIENS MOVE FROM LEFT TO RIGHT
   function moveAliens() {
     removeAliens()
@@ -159,11 +160,11 @@ function init() {
 
   //! FUNCTION TO START GAME TIMER 
   function startTimer() {
-    console.log(running)
+    // console.log(running)
     if (!running) {
       timerId = setInterval(moveAliens, 1250) 
       running = true
-      console.log(running)
+      // console.log(running)
     } else { 
       // clearInterval(timerId) // and that is when we stop the timer
       running = false 
@@ -215,7 +216,7 @@ function init() {
       squares[currentShootIndex].classList.add('shoot')
       shootTimerId = setInterval(shootMovement, 100) // starts the timer to make the shot move
     } else {
-      console.log('you can\'t shoot!')
+      // console.log('you can\'t shoot!')
     }
 
     //! FUNCTION TO MAKE SHOT MOVE
@@ -233,7 +234,7 @@ function init() {
           scoreDisplay.innerHTML = score // display points
         }
         if (aliens.length === 0) {
-          console.log('WINNER!')
+          // console.log('WINNER!')
           // location.reload()
           // console.log(running)
           // running = true
@@ -242,12 +243,12 @@ function init() {
           // console.log(aliens)
           aliens = new Array(0, 1, 2, 3, 4, 5, 6, 7, 11, 12, 13, 14, 15, 16, 17, 18, 22, 23, 24, 25, 26, 27, 28, 29)
           placeAliens()
-          console.log(aliens)
+          // console.log(aliens)
           // alienSpeed -= 250
           // console.log(alienSpeed)
         }
         if (squares[currentShootIndex].classList.contains('bomb')) {
-          console.log('bomb hit')
+          // console.log('bomb hit')
           squares[currentShootIndex].classList.remove('bomb', 'shoot')
           squares[currentShootIndex + width].classList.remove('bomb', 'shoot')
           clearInterval(shootTimerId)
@@ -289,14 +290,14 @@ function init() {
       // console.log(startOfBomb)
       // console.log(squares[startOfBomb])
       if (startOfBomb <= 110) {
-        console.log(startOfBomb)
+        // console.log(startOfBomb)
         startOfBomb += width // every instance of the timer -11 from the index
         squares[startOfBomb].classList.add('bomb') // add new bomb class to square
         if (squares[startOfBomb].classList.contains('player')) {
           gameOver()
         }
       } else {
-        console.log('past grid')
+        // console.log('past grid')
         clearInterval(bombDropTimerId)
       }
     }
