@@ -34,7 +34,7 @@ The 3 rows of invading Bart aliens are programmed to move automatically once the
 
 If the player manages to destroy all the invading Bart aliens then the game restarts but their score remains so they can keep playing. Once the game ends, a modal popup appears displaying the players score. This also gets added to the leaderboard from local storage.
 
-Here is an example of my code which controls the aliens movement and starts the players shot movement:
+Here are examples of my code that controls the aliens movement and fires the players bullet if the column doesn't already contain a bullet:
 
 ```
   function moveAliens() {
@@ -53,26 +53,34 @@ Here is an example of my code which controls the aliens movement and starts the 
     }
     addAliens()
   }
-  ```
+```
 
-  ```
-    function shoot() {
-    let currentShootIndex = playerIndex - width 
-    let newShootIndex = currentShootIndex 
-    const columnArray = [] 
-    
-    for (let i = 1; i < width - 1; i++) {
-      columnArray.push(newShootIndex -= 11) 
-    }
+```
+  function shoot() {
+  let currentShootIndex = playerIndex - width 
+  let newShootIndex = currentShootIndex 
+  const columnArray = [] 
+  
+  for (let i = 1; i < width - 1; i++) {
+    columnArray.push(newShootIndex -= 11) 
+  }
 
-    const someContainShots = columnArray.some(item => { 
-      return squares[item].classList.contains('shoot')
-    })
+  const someContainShots = columnArray.some(item => { 
+    return squares[item].classList.contains('shoot')
+  })
 
-    if (someContainShots === false) {
-      squares[currentShootIndex].classList.add('shoot')
-      shootTimerId = setInterval(shootMovement, 100) 
-    } else {
-      console.log('you can\'t shoot!')
-    }
-  ```
+  if (someContainShots === false) {
+    squares[currentShootIndex].classList.add('shoot')
+    shootTimerId = setInterval(shootMovement, 100) 
+  } else {
+    console.log('you can\'t shoot!')
+  }
+```
+
+## Challenges and future improvements:
+1. The first challenge I encountered was creating the movement for the aliens. I used an array of numbers corresponding to grid square index numbers to place the aliens, so I had to ensure that the conditions to move them left, right, up and down worked for all aliens.
+2. Another challenge was stopping the players shots going through the aliens when more than one was fired up the same column. To fix this issue I wrote a piece of code that checked if a grid in that column already contained a bullet or not.
+3. There are a number of future improvements that I plan to make. Firstly, I would like to add functionality for the movement of the aliens to speed up once they have all been destroyed. I would also like to develop the leaderboard with names and everyscore displaying no matter if it was the highest or not.
+
+![screenshot of space invaders game over](https://github.com/abigailforeman1/sei-project-1/raw/master/assets/space_invaders2.png)
+
