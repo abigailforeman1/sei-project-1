@@ -144,6 +144,7 @@ function init() {
     // default option will add 1 to each alien array element until a condition is met in the loop --- this starts the aliens moving 
     addAliens()
   }
+  
   //! FUNCTION TO ADD ALIEN CLASS
   function addAliens() {
     aliens = aliens.map(a => a + direction)
