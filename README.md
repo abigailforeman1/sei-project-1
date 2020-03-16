@@ -36,7 +36,7 @@ If the player manages to destroy all the invading Bart aliens then the game rest
 
 Here are examples of my code that controls the aliens movement and fires the players bullet if the column doesn't already contain a bullet:
 
-```
+```javascript
   function moveAliens() {
     removeAliens()
 
@@ -55,7 +55,7 @@ Here are examples of my code that controls the aliens movement and fires the pla
   }
 ```
 
-```
+```javascript
   function shoot() {
   let currentShootIndex = playerIndex - width 
   let newShootIndex = currentShootIndex 
