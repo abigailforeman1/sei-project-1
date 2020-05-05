@@ -121,7 +121,7 @@ function init() {
   //! FUNCTION TO MAKE ALIENS MOVE FROM LEFT TO RIGHT
   function moveAliens() {
     removeAliens()
-
+    console.log(aliens[0])
     // move 3 -> 14
     if (direction === 1 && aliens[0] % width === 3) {
       direction = width
@@ -357,3 +357,4 @@ function init() {
 }
 
 window.addEventListener('DOMContentLoaded', init)
+

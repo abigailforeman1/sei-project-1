@@ -15,7 +15,7 @@ To create a functioning browser game using Vanilla JavaScript
 * Github
 
 ## Deployment: 
-This game has been deployed on GitHub Pages and can be found here: abigailforeman1.github.io/sei-project-1/
+This game has been deployed on GitHub Pages and can be found here: https://spaceinvaders-project1.herokuapp.com/
 
 ## Getting started: 
 Use the clone button to download the game source code. Open the index.html file in your browser and the game should start, if not check the console for any issues.
