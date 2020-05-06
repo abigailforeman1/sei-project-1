@@ -77,6 +77,16 @@ Here are examples of my code that controls the aliens movement and fires the pla
   }
 ```
 
+## Key learnings
+1. Breaking tasks down into smaller chunks 
+I was nervous to start the project but after spending time psuedocoding and planning what part of the game I was going to tackle each day, I felt much more confident and prepared to start. I have continued using this process moving forward which has been very helpful.
+
+2. Console logging
+It was definitely during this project that I realised the power of console logging and got into the habit of console logging my way through bugs.  
+
+3. Set intervals 
+I hadn't worked with many timers prior to this project but definitely came out of it feeling more comfortable using them. The game has multiple set intervals running simultaneously, so I had to ensure I was using approriate and clear naming conventions to avoid any chaos while building! 
+
 ## Challenges and future improvements:
 1. The first challenge I encountered was creating the movement for the aliens. I used an array of numbers corresponding to grid square index numbers to place the aliens, so I had to ensure that the conditions to move them left, right, up and down worked for all aliens.
 2. Another challenge was stopping the players shots going through the aliens when more than one was fired up the same column. To fix this issue I wrote a piece of code that checked if a grid in that column already contained a bullet or not.
