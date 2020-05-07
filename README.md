@@ -77,7 +77,7 @@ Here are examples of my code that controls the aliens movement and fires the pla
   }
 ```
 
-## Key learnings
+## Key learnings:
 1. Breaking tasks down into smaller chunks 
 
 I was nervous to start the project but after spending time psuedocoding and planning what part of the game I was going to tackle each day, I felt much more confident and prepared to start. I have continued using this process moving forward which has been very helpful.
